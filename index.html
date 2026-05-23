@@ -3,205 +3,346 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>С Днём Рождения!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>С Днём Рождения, Ира!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --pink:   #F3619C;
+      --yellow: #EDE986;
+      --cream:  #FAF4CD;
+      --dark:   #1A0A0F;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      min-height: 100vh;
-      background: #fdf6f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Inter', sans-serif;
+      background: var(--pink);
+      color: var(--cream);
+      font-family: 'Space Grotesk', sans-serif;
       overflow-x: hidden;
     }
 
-    .petals {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
+    /* ── Reveal animations ── */
+    .r {
+      opacity: 0;
+      transform: translateY(48px);
+      transition: opacity .75s cubic-bezier(.16,1,.3,1),
+                  transform .75s cubic-bezier(.16,1,.3,1);
     }
-    .petal {
-      position: absolute;
-      top: -40px;
-      font-size: 20px;
-      animation: fall linear infinite;
-      opacity: 0.6;
-    }
-    @keyframes fall {
-      0%   { transform: translateY(-40px) rotate(0deg);   opacity: 0.7; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0;   }
-    }
+    .r.in { opacity: 1; transform: none; }
 
-    .card {
-      position: relative;
-      z-index: 1;
-      background: #fff;
-      border-radius: 28px;
-      box-shadow: 0 20px 60px rgba(180, 100, 100, 0.12), 0 4px 16px rgba(0,0,0,0.06);
-      max-width: 560px;
-      width: calc(100% - 40px);
-      padding: 56px 48px 48px;
+    /* ── Scenes ── */
+    .scene {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 100px 24px;
       text-align: center;
-      animation: fadeUp 0.8s ease both;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .scene--cream { background: var(--cream); color: var(--dark); }
+    .scene--dark  { background: var(--dark);  color: var(--cream); }
 
-    .emoji-top {
-      font-size: 52px;
-      margin-bottom: 12px;
-      display: block;
-      animation: bounce 2s ease-in-out infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-8px); }
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: #2d1a1a;
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-    h1 span { color: #c4626a; }
-
-    .subtitle {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: #9e6a6a;
+    /* ── Labels ── */
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
       margin-bottom: 32px;
+      opacity: .55;
+    }
+    .scene--cream .label { color: var(--pink); opacity: 1; }
+    .scene--dark  .label { color: var(--yellow); opacity: 1; }
+
+    /* ── Headlines ── */
+    .headline {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(56px, 14vw, 140px);
+      line-height: .92;
+      letter-spacing: -1px;
+    }
+    .headline .y  { color: var(--yellow); }
+    .headline .p  { color: var(--pink); }
+    .headline .cr { color: var(--cream); }
+    .headline .dk { color: var(--dark); }
+
+    .sub {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(20px, 4vw, 44px);
+      margin-top: 14px;
+      opacity: .7;
     }
 
+    .body-text {
+      font-size: clamp(15px, 2.4vw, 19px);
+      font-weight: 300;
+      line-height: 1.9;
+      max-width: 560px;
+      margin-top: 28px;
+      opacity: .85;
+    }
+
+    /* ── Stats list ── */
+    .stat-list {
+      list-style: none;
+      max-width: 620px;
+      width: 100%;
+      margin-top: 8px;
+      text-align: left;
+    }
+    .stat-item {
+      display: flex;
+      gap: 20px;
+      align-items: baseline;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(250,244,205,.15);
+      font-size: clamp(15px, 2.8vw, 22px);
+      font-weight: 300;
+      opacity: 0;
+      transform: translateX(-44px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .stat-item.in { opacity: 1; transform: none; }
+    .stat-num {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(22px, 4vw, 36px);
+      color: var(--yellow);
+      min-width: 52px;
+      text-align: right;
+    }
+    .stat-dim { opacity: .45; font-size: .82em; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 40px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Todo list ── */
+    .todo-list {
+      list-style: none;
+      max-width: 560px;
+      width: 100%;
+      margin-top: 36px;
+      text-align: left;
+    }
+    .todo-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(26,10,15,.1);
+      font-size: clamp(14px, 2.4vw, 19px);
+      line-height: 1.55;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .todo-item.in { opacity: 1; transform: none; }
+    .todo-arrow { color: var(--pink); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .todo-hl { color: var(--pink); font-weight: 700; }
+
+    /* ── Divider ── */
     .divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, #f0c4b8, #c4626a, #f0c4b8);
-      margin: 0 auto 32px;
+      width: 44px;
+      height: 3px;
+      background: var(--yellow);
+      margin: 32px auto 0;
       border-radius: 2px;
     }
 
-    .message {
-      font-size: 1rem;
-      color: #5a3a3a;
-      line-height: 1.8;
-      margin-bottom: 40px;
-    }
-    .message strong {
-      color: #c4626a;
-      font-weight: 500;
-    }
-
-    .gift-teaser {
-      background: linear-gradient(135deg, #fff5f0 0%, #fde8e8 100%);
-      border: 1.5px dashed #e8a0a0;
-      border-radius: 16px;
-      padding: 24px 20px;
-      margin-bottom: 32px;
-    }
-    .gift-teaser .gift-icon {
-      font-size: 36px;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .gift-teaser p {
-      font-size: 0.92rem;
-      color: #8a5050;
-      line-height: 1.6;
-    }
-
+    /* ── CTA button ── */
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: linear-gradient(135deg, #c4626a, #e08080);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(14px, 1.8vw, 17px);
+      font-weight: 700;
       text-decoration: none;
-      padding: 16px 36px;
-      border-radius: 50px;
-      box-shadow: 0 8px 24px rgba(196, 98, 106, 0.35);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
+      padding: 20px 44px;
+      border-radius: 60px;
+      margin-top: 52px;
+      transition: transform .2s, box-shadow .2s;
+      letter-spacing: .5px;
+      background: var(--yellow);
+      color: var(--dark);
+      box-shadow: 5px 5px 0 rgba(250,244,205,.35);
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(196, 98, 106, 0.45);
-    }
-    .btn:active { transform: translateY(0); }
-    .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .btn:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 rgba(250,244,205,.35); }
 
-    .footer-note {
-      margin-top: 28px;
-      font-size: 0.8rem;
-      color: #bfa0a0;
+    /* ── Scroll hint ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--cream);
+      opacity: .4;
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(9px); }
+    }
+
+    @media (max-width: 600px) {
+      .scene { padding: 72px 20px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="petals" id="petals"></div>
-
-  <div class="card">
-    <span class="emoji-top">🌸</span>
-
-    <h1>С Днём<br><span>Рождения!</span></h1>
-    <p class="subtitle">Для тебя — с любовью</p>
-
-    <div class="divider"></div>
-
-    <p class="message">
-      Дорогая <strong>имя подруги</strong>,<br><br>
-      в твой особенный день хочу сказать, как сильно ты
-      украшаешь мою жизнь. Ты — тот человек, с которым
-      смеяться легко, а молчать комфортно.<br><br>
-      Пусть этот год будет полон приятных сюрпризов,
-      тёплых моментов и всего, о чём ты давно мечтаешь.
-      Ты этого заслуживаешь — без оговорок. 🌷
-    </p>
-
-    <div class="gift-teaser">
-      <span class="gift-icon">🎁</span>
-      <p>Я приготовила для тебя небольшой подарок.<br>Нажми кнопку ниже, чтобы его забрать!</p>
+  <!-- ── 01 HERO ── -->
+  <section class="scene" style="position:relative;">
+    <div class="r" id="hero">
+      <p class="label" style="margin-bottom:20px; opacity:.45;">поздравление</p>
+      <h1 class="headline">
+        <span class="cr">ира,</span><br>
+        <span class="y">с днём</span><br>
+        <span class="cr">рождения</span>
+      </h1>
+      <p class="sub">28 🫶</p>
     </div>
-
-    <a class="btn" href="GOOGLE_DRIVE_LINK" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
+    <div class="scroll-hint">
+      <span>скролл</span>
+      <svg width="14" height="20" fill="none" viewBox="0 0 14 20">
+        <path d="M7 0v16M1 10l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Забрать подарок
-    </a>
+    </div>
+  </section>
 
-    <p class="footer-note">✨ Открой и наслаждайся</p>
-  </div>
+  <!-- ── 02 ГОД В ЦИФРАХ ── -->
+  <section class="scene">
+    <p class="label r">этот год принёс тебе</p>
+    <ul class="stat-list">
+      <li class="stat-item" data-d="0">
+        <span class="stat-num">3</span>
+        <span>переезда</span>
+      </li>
+      <li class="stat-item" data-d="110">
+        <span class="stat-num">2</span>
+        <span>работы <span class="stat-dim">(одна из них — огонь)</span></span>
+      </li>
+      <li class="stat-item" data-d="220">
+        <span class="stat-num">1</span>
+        <span>Серёга Козленко</span>
+      </li>
+      <li class="stat-item" data-d="330">
+        <span class="stat-num">586</span>
+        <span>командировок <span class="stat-dim">Питер → Москва</span></span>
+      </li>
+      <li class="stat-item" data-d="440">
+        <span class="stat-num">∞</span>
+        <span>разъебных проектов</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── 03 РЕЗУЛЬТАТ ── -->
+  <section class="scene">
+    <span class="badge r">итог прост</span>
+    <h2 class="headline r">
+      <span class="cr">она</span><br>
+      <span class="y">справилась</span>
+    </h2>
+    <p class="body-text r">
+      более того — в какой-то момент просто вышла на региональный уровень
+      и пахала за десятерых, вообще не сбавляя скорость
+    </p>
+    <div class="divider r"></div>
+  </section>
+
+  <!-- ── 04 МАШИНА ── -->
+  <section class="scene">
+    <p class="label r">очередной год доказал</p>
+    <h2 class="headline r" style="max-width:820px;">
+      <span class="cr">ира —</span><br>
+      <span class="y">супер</span><br>
+      <span class="cr">сильная девчонка</span>
+    </h2>
+    <p class="body-text r">
+      и чем дальше, тем сильнее разгоняется эта машина
+    </p>
+  </section>
+
+  <!-- ── 05 IMPORTANT NOTE ── -->
+  <section class="scene scene--cream">
+    <p class="label r">important note ☝️</p>
+    <h2 class="headline r">
+      <span class="dk">научиться,</span><br>
+      <span class="p">блять,</span><br>
+      <span class="dk">отдыхать</span>
+    </h2>
+    <p class="body-text r" style="color:var(--dark);">
+      поэтому хотя бы на 1 день предлагаю:
+    </p>
+    <ul class="todo-list">
+      <li class="todo-item" data-d="0">
+        <span class="todo-arrow">→</span>
+        <span>снять с себя роль <span class="todo-hl">CEO чужих проблем</span></span>
+      </li>
+      <li class="todo-item" data-d="140">
+        <span class="todo-arrow">→</span>
+        <span>перестать думать про дедлайны, командировки и прочие заёбы</span>
+      </li>
+      <li class="todo-item" data-d="280">
+        <span class="todo-arrow">→</span>
+        <span>примерить роль <span class="todo-hl">pink pilates princess</span> 👸💕💅</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── 06 CTA ── -->
+  <section class="scene scene--dark">
+    <p class="label r">в общем</p>
+    <h2 class="headline r" style="max-width:720px;">
+      <span class="cr">вот твой</span><br>
+      <span class="y">официальный</span><br>
+      <span class="cr">билет</span>
+    </h2>
+    <p class="body-text r" style="color:rgba(250,244,205,.6);">
+      в жизнь, где ты<br>
+      немного <em>less</em> corporate girl<br>
+      и немного <em>more</em> just a girl
+    </p>
+    <a class="btn r" href="GOOGLE_DRIVE_LINK" target="_blank" rel="noopener">
+      забрать билет &nbsp;→
+    </a>
+  </section>
 
   <script>
-    const emojis = ['🌸','🌺','✨','🌷','💕','🎀'];
-    const container = document.getElementById('petals');
-    for (let i = 0; i < 22; i++) {
-      const el = document.createElement('span');
-      el.className = 'petal';
-      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      el.style.left = Math.random() * 100 + '%';
-      el.style.fontSize = (14 + Math.random() * 14) + 'px';
-      el.style.animationDuration = (6 + Math.random() * 10) + 's';
-      el.style.animationDelay = (Math.random() * 10) + 's';
-      container.appendChild(el);
-    }
+    document.getElementById('hero').classList.add('in');
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const delay = el.dataset.d ? +el.dataset.d : 0;
+        setTimeout(() => el.classList.add('in'), delay);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.r, .stat-item, .todo-item').forEach(el => io.observe(el));
   </script>
 </body>
 </html>
